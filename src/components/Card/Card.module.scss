@@ -1,0 +1,33 @@
+.card {
+    height: 100%;
+    width: 240px;
+    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2), 0px 3px 4px rgba(0, 0, 0, 0.12),
+        0px 2px 4px rgba(0, 0, 0, 0.14);
+    border-radius: 4px;
+    transition: transform linear 0.2s;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.07);
+    }
+
+    & > img {
+        width: 100%;
+        max-height: 168px;
+        object-fit: cover;
+    }
+
+    & > h2 {
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 30px;
+        margin: 12px 16px 0;
+    }
+
+    & > p {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 21px;
+        margin: 1px 16px 12px 16px;
+    }
+}
