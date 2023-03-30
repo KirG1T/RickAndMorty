@@ -62,6 +62,34 @@ const MainPage: FC = () => {
         };
     }, [fetchNextPage, hasNextPage]);
 
+    useEffect(() => {
+        let fetching = false;
+
+        const onTouchMove = async () => {
+            const { scrollingElement } = document;
+
+            if (scrollingElement) {
+                const { scrollHeight, scrollTop, clientHeight } =
+                    scrollingElement;
+
+                const isEndOfPage =
+                    scrollHeight - scrollTop <= clientHeight + 1;
+
+                if (!fetching && isEndOfPage && hasNextPage) {
+                    fetching = true;
+                    await fetchNextPage();
+                    fetching = false;
+                }
+            }
+        };
+
+        document.addEventListener('touchmove', onTouchMove);
+
+        return () => {
+            document.removeEventListener('touchmove', onTouchMove);
+        };
+    }, [fetchNextPage, hasNextPage]);
+
     const updateSearchValue = useMemo(
         () =>
             debounce((str) => {
