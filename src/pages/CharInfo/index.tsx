@@ -1,14 +1,16 @@
+/* eslint-disable no-nested-ternary */
 import { FC } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getSelectedCharacter } from '../../api/axios';
 
 import styles from './CharInfo.module.scss';
+import NotFoundBlock from '../../components/NotFoundBlock';
 
 const CharInfo: FC = () => {
     const { id } = useParams();
 
-    const { isLoading, isError, data, error } = useQuery({
+    const { isLoading, isError, data } = useQuery({
         queryKey: ['character', id],
         queryFn: () => {
             if (typeof id === 'string') {
@@ -16,11 +18,8 @@ const CharInfo: FC = () => {
             }
             return undefined;
         },
+        retry: false,
     });
-
-    if (isError) {
-        return <span>Error: {(error as Error).message}</span>;
-    }
 
     return (
         <>
@@ -30,7 +29,7 @@ const CharInfo: FC = () => {
                 </div>
             </Link>
 
-            {isLoading === false && (
+            {!isLoading && !isError ? (
                 <div className={styles.char__container}>
                     <div className={styles.char__imageWrapper}>
                         <img src={data?.data.image} alt={data?.data.name} />
@@ -62,6 +61,10 @@ const CharInfo: FC = () => {
                         </div>
                     </div>
                 </div>
+            ) : !isError ? (
+                <span className={styles.loading}>Loading...</span>
+            ) : (
+                <NotFoundBlock />
             )}
         </>
     );
